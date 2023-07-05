@@ -13,6 +13,8 @@ public class Meal {
   private int calories;
   private int price;
 
+
+
   public String getName() {
 
     return this.name;

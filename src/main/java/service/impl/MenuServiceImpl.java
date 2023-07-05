@@ -5,13 +5,21 @@ import domain.eto.Meal;
 import domain.eto.Produce;
 import service.api.MenuService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //TODO IMPLEMENT
 public class MenuServiceImpl implements MenuService {
     @Override
     public List<Meal> findVegetarianFood(List<Meal> meals) {
-        return null;
+        List<Meal> vegetarianFood = meals
+                .stream()
+                .filter(mealItem -> mealItem.getDietType() == DietType.VEGETARIAN)
+                .collect(Collectors.toList());
+        return vegetarianFood;
+
+
     }
 
     @Override
