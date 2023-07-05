@@ -4,6 +4,7 @@ import domain.DietType;
 import domain.eto.Meal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import service.exception.NoFoodFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,38 @@ class MenuServiceTest {
 
     }
 
+    @Test
+    public void shouldThrowExceptionWhenInputDoesNotContainVegetarian() {
+        // given
+        Meal regularMeal = new Meal();
+        regularMeal.setName("stinky meat");
+        regularMeal.setDietType(DietType.REGULAR);
 
+        // when
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(regularMeal);
+
+
+        MenuServiceImpl menuService = new MenuServiceImpl();
+
+        // then
+        Assertions.assertThrows(NoFoodFoundException.class, () ->
+                menuService.findVegetarianFood(mealsToCheck));
+
+    }
+
+    @Test
+    public void shouldProperlyHandleNullAsInput() {
+        // given
+        List<Meal> mealsToCheck = null;
+
+        // when
+        MenuServiceImpl menuService = new MenuServiceImpl();
+
+        // then
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                menuService.findVegetarianFood(mealsToCheck));
+    }
 
     @Test
     void findFoodByType() {

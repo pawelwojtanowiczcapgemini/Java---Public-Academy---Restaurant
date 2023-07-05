@@ -4,8 +4,8 @@ import domain.DietType;
 import domain.eto.Meal;
 import domain.eto.Produce;
 import service.api.MenuService;
+import service.exception.NoFoodFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,13 +13,21 @@ import java.util.stream.Collectors;
 public class MenuServiceImpl implements MenuService {
     @Override
     public List<Meal> findVegetarianFood(List<Meal> meals) {
+        if (meals == null) {
+            throw new IllegalArgumentException("input == null!");
+        }
+
         List<Meal> vegetarianFood = meals
                 .stream()
                 .filter(mealItem -> mealItem.getDietType() == DietType.VEGETARIAN)
                 .collect(Collectors.toList());
+
+        if (vegetarianFood.isEmpty()) {
+            NoFoodFoundException noFoodFoundException = new NoFoodFoundException();
+            throw noFoodFoundException;
+        }
+
         return vegetarianFood;
-
-
     }
 
     @Override
