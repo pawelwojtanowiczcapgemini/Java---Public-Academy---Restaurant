@@ -13,16 +13,10 @@ class MenuServiceTest {
 
     @Test
     void shouldFindVegetarianFood() {
-
         // given: vegetarian meal needed, regular meal needed
 
-        Meal vegetarianMeal = new Meal();
-        vegetarianMeal.setName("Cool vege meal");
-        vegetarianMeal.setDietType(DietType.VEGETARIAN);
-
-        Meal regularMeal = new Meal();
-        regularMeal.setName("Not coll because it's meat meal");
-        regularMeal.setDietType(DietType.REGULAR);
+        Meal vegetarianMeal =  createVegetrianMeal();
+        Meal regularMeal =  createRegularMeal();
 
         // when: I call the method findVegetarianFood
 
@@ -45,9 +39,7 @@ class MenuServiceTest {
     @Test
     public void shouldThrowExceptionWhenInputDoesNotContainVegetarian() {
         // given
-        Meal regularMeal = new Meal();
-        regularMeal.setName("stinky meat");
-        regularMeal.setDietType(DietType.REGULAR);
+        Meal regularMeal =  createRegularMeal();
 
         // when
         List<Meal> mealsToCheck = new ArrayList<>();
@@ -97,5 +89,22 @@ class MenuServiceTest {
 
     @Test
     void findFoodExcludingAll() {
+    }
+
+    private Meal createVegetrianMeal() {
+
+        Meal vegetarianMeal = new Meal();
+        vegetarianMeal.setName("Cool vege meal");
+        vegetarianMeal.setDietType(DietType.VEGETARIAN);
+
+        return vegetarianMeal;
+    }
+
+    private Meal createRegularMeal() {
+        Meal regularMeal = new Meal();
+        regularMeal.setName("Not coll because it's meat meal");
+        regularMeal.setDietType(DietType.REGULAR);
+
+        return regularMeal;
     }
 }
