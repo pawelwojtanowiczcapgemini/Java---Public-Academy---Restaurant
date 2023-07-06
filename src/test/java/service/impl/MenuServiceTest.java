@@ -1,9 +1,11 @@
 package service.impl;
 
 import domain.DietType;
+import domain.ProductType;
 import domain.eto.Meal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import service.api.MenuService;
 import service.exception.NoFoodFoundException;
 
 import java.util.ArrayList;
@@ -15,8 +17,8 @@ class MenuServiceTest {
     void shouldFindVegetarianFood() {
         // given: vegetarian meal needed, regular meal needed
 
-        Meal vegetarianMeal =  createVegetrianMeal();
-        Meal regularMeal =  createRegularMeal();
+        Meal vegetarianMeal = createVegetrianMeal();
+        Meal regularMeal = createRegularMeal();
 
         // when: I call the method findVegetarianFood
 
@@ -39,7 +41,7 @@ class MenuServiceTest {
     @Test
     public void shouldThrowExceptionWhenInputDoesNotContainVegetarian() {
         // given
-        Meal regularMeal =  createRegularMeal();
+        Meal regularMeal = createRegularMeal();
 
         // when
         List<Meal> mealsToCheck = new ArrayList<>();
@@ -69,10 +71,50 @@ class MenuServiceTest {
 
     @Test
     void findFoodByType() {
+        // given
+        Meal vegetarianMeal = createVegetrianMeal();
+        Meal regularMeals = createRegularMeal();
+        Meal secondRegularMeal = createSecondRegularMeal();
+
+        // when
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(vegetarianMeal);
+        mealsToCheck.add(regularMeals);
+        mealsToCheck.add(secondRegularMeal);
+
+        // then
+        MenuServiceImpl menuService = new MenuServiceImpl();
+        List<Meal> resultsRegular = menuService.findFoodByType(mealsToCheck, DietType.REGULAR);
+        List<Meal> resultsVegetarian = menuService.findFoodByType(mealsToCheck, DietType.VEGETARIAN);
+
+        Assertions.assertEquals(2, resultsRegular.size());
+        Assertions.assertTrue(resultsRegular.get(0).getName().contains("meat"));
+
+        Assertions.assertEquals(1, resultsVegetarian.size());
+        Assertions.assertTrue(resultsVegetarian.get(0).getName().contains("vege"));
+
+
     }
 
     @Test
     void findFoodCheaperThanPrice() {
+        // given
+        Meal cheapMeal = createCheapMeal();
+        Meal expensiveMeal = createExpensiveMeal();
+
+        // when
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(cheapMeal);
+        mealsToCheck.add(expensiveMeal);
+
+        // then
+
+        int numberToCompare = 15;
+        MenuServiceImpl menuService = new MenuServiceImpl();
+        List<Meal> resultCheapMeal = menuService.findFoodCheaperThanPrice(mealsToCheck, numberToCompare);
+
+        Assertions.assertEquals(1, resultCheapMeal.size());
+        Assertions.assertTrue(numberToCompare > resultCheapMeal.get(0).getPrice());
     }
 
     @Test
@@ -107,4 +149,30 @@ class MenuServiceTest {
 
         return regularMeal;
     }
+
+    private Meal createSecondRegularMeal() {
+        Meal secondRegularMeal = new Meal();
+        secondRegularMeal.setName("It's meat meal");
+        secondRegularMeal.setDietType(DietType.REGULAR);
+
+        return secondRegularMeal;
+    }
+
+    private Meal createCheapMeal() {
+        Meal cheapMeal = new Meal();
+        cheapMeal.setName("Cheap meal");
+        cheapMeal.setPrice(10);
+
+        return cheapMeal;
+    }
+
+    private Meal createExpensiveMeal() {
+        Meal expensiveMeal = new Meal();
+        expensiveMeal.setName("Expensive meal");
+        expensiveMeal.setPrice(30);
+
+        return expensiveMeal;
+    }
+
+
 }

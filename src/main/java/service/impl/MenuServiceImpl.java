@@ -6,6 +6,7 @@ import domain.eto.Produce;
 import service.api.MenuService;
 import service.exception.NoFoodFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,12 +33,32 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Meal> findFoodByType(List<Meal> meals, DietType diet) {
-        return null;
+        List<Meal> typedFood = new ArrayList<>();
+        if(diet == DietType.VEGETARIAN) {
+            typedFood = meals
+                .stream()
+                .filter(mealItem -> mealItem.getDietType() == diet.VEGETARIAN)
+                .collect(Collectors.toList());
+
+        }
+        else if (diet == DietType.REGULAR) {
+            typedFood = meals
+                    .stream()
+                    .filter(mealItem -> mealItem.getDietType() == diet.REGULAR)
+                    .collect(Collectors.toList());
+        }
+
+        return typedFood;
     }
 
     @Override
     public List<Meal> findFoodCheaperThanPrice(List<Meal> meals, Integer price) {
-        return null;
+        List<Meal> cheapFood = meals
+                .stream()
+                .filter(mealItem -> mealItem.getPrice() < price)
+                .collect(Collectors.toList());
+
+        return cheapFood;
     }
 
     @Override
