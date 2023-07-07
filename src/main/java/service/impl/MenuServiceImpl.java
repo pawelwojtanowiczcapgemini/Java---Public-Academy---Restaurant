@@ -70,11 +70,15 @@ public class MenuServiceImpl implements MenuService {
                 .filter(mealItem -> mealItem.getName() == name)
                 .collect(Collectors.toList());
 
-        int limitedPrice = limitedPriceFood.get(0).getPrice();
+        NoFoodFoundException noFoodFoundException = new NoFoodFoundException();
+        if (limitedPriceFood.size() ==0)
+            throw noFoodFoundException;
+
+        int priceLimit = limitedPriceFood.get(0).getPrice();
 
         List<Meal> cheapFood = meals
                 .stream()
-                .filter(mealItem -> mealItem.getPrice() < limitedPrice)
+                .filter(mealItem -> mealItem.getPrice() < priceLimit)
                 .collect(Collectors.toList());
 
         return cheapFood;
