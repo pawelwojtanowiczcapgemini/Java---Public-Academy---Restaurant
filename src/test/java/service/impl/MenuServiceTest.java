@@ -162,6 +162,10 @@ class MenuServiceTest {
 
         Assertions.assertEquals(1, resultCheapMeal.size());
         Assertions.assertEquals("Cheap meal",resultCheapMeal.get(0).getName());
+
+        mealsToCheck.clear();
+        Assertions.assertThrows(NoFoodFoundException.class, () ->
+                menuService.findFoodCheaperThanPrice(mealsToCheck, nameOfFoodWithPriceLimit));
     }
 
 
