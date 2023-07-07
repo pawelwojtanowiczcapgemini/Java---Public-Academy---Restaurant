@@ -33,20 +33,12 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Meal> findFoodByType(List<Meal> meals, DietType diet) {
-        List<Meal> typedFood = new ArrayList<>();
-        if(diet == DietType.VEGETARIAN) {
+        List<Meal> typedFood;
+
             typedFood = meals
                 .stream()
-                .filter(mealItem -> mealItem.getDietType() == diet.VEGETARIAN)
+                .filter(mealItem -> mealItem.getDietType() == diet)
                 .collect(Collectors.toList());
-
-        }
-        else if (diet == DietType.REGULAR) {
-            typedFood = meals
-                    .stream()
-                    .filter(mealItem -> mealItem.getDietType() == diet.REGULAR)
-                    .collect(Collectors.toList());
-        }
 
         return typedFood;
     }
@@ -63,12 +55,29 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Meal> findFoodCheaperWithCalories(List<Meal> meals, Integer minCalories, Integer maxCalories) {
-        return null;
+        List<Meal> caloriesMeal = meals
+                .stream()
+                .filter(mealItem -> mealItem.getCalories() < maxCalories & mealItem.getCalories() > minCalories)
+                .collect(Collectors.toList());
+
+        return caloriesMeal;
     }
 
     @Override
     public List<Meal> findFoodCheaperThanPrice(List<Meal> meals, String name) {
-        return null;
+        List<Meal> limitedPriceFood = meals
+                .stream()
+                .filter(mealItem -> mealItem.getName() == name)
+                .collect(Collectors.toList());
+
+        int limitedPrice = limitedPriceFood.get(0).getPrice();
+
+        List<Meal> cheapFood = meals
+                .stream()
+                .filter(mealItem -> mealItem.getPrice() < limitedPrice)
+                .collect(Collectors.toList());
+
+        return cheapFood;
     }
 
     @Override

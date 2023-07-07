@@ -89,6 +89,7 @@ class MenuServiceTest {
 
         Assertions.assertEquals(2, resultsRegular.size());
         Assertions.assertTrue(resultsRegular.get(0).getName().contains("meat"));
+        Assertions.assertTrue(resultsRegular.get(1).getName().contains("meat"));
 
         Assertions.assertEquals(1, resultsVegetarian.size());
         Assertions.assertTrue(resultsVegetarian.get(0).getName().contains("vege"));
@@ -109,21 +110,61 @@ class MenuServiceTest {
 
         // then
 
-        int numberToCompare = 15;
+        int priceLimit = 15;
         MenuServiceImpl menuService = new MenuServiceImpl();
-        List<Meal> resultCheapMeal = menuService.findFoodCheaperThanPrice(mealsToCheck, numberToCompare);
+        List<Meal> resultCheapMeal = menuService.findFoodCheaperThanPrice(mealsToCheck, priceLimit);
 
         Assertions.assertEquals(1, resultCheapMeal.size());
-        Assertions.assertTrue(numberToCompare > resultCheapMeal.get(0).getPrice());
+        Assertions.assertTrue(priceLimit > resultCheapMeal.get(0).getPrice());
     }
 
     @Test
     void findFoodCheaperWithCalories() {
+        // given
+        Meal highCaloriesMeal = createMealWithEnergyValue("Hamburger", 300);
+        Meal lowCaloriesMeal = createMealWithEnergyValue("Salad", 71);
+
+        // when
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(highCaloriesMeal);
+        mealsToCheck.add(lowCaloriesMeal);
+
+        //then
+        int minCalories = 60;
+        int maxCalories = 150;
+
+        MenuServiceImpl menuService = new MenuServiceImpl();
+        List<Meal> resultCaloriesMeal = menuService.findFoodCheaperWithCalories(mealsToCheck, minCalories, maxCalories);
+
+        Assertions.assertEquals(1, resultCaloriesMeal.size());
+        Assertions.assertEquals("Salad", resultCaloriesMeal.get(0).getName());
+        Assertions.assertTrue(resultCaloriesMeal.get(0).getCalories() < maxCalories && resultCaloriesMeal.get(0).getCalories() > minCalories);
     }
 
     @Test
     void testFindFoodCheaperThanPrice() {
+        // given
+        Meal cheapMeal = createCheapMeal();
+        Meal expensiveMeal = createExpensiveMeal();
+        Meal middlePriceMeal = createMiddlePriceMeal();
+
+        // when
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(cheapMeal);
+        mealsToCheck.add(expensiveMeal);
+        mealsToCheck.add(middlePriceMeal);
+
+        // then
+
+        String nameOfFoodWithPriceLimit = "Middle-price meal";
+        MenuServiceImpl menuService = new MenuServiceImpl();
+        List<Meal> resultCheapMeal = menuService.findFoodCheaperThanPrice(mealsToCheck, nameOfFoodWithPriceLimit);
+
+        Assertions.assertEquals(1, resultCheapMeal.size());
+        Assertions.assertEquals("Cheap meal",resultCheapMeal.get(0).getName());
     }
+
+
 
     @Test
     void findFoodContaining() {
@@ -172,6 +213,22 @@ class MenuServiceTest {
         expensiveMeal.setPrice(30);
 
         return expensiveMeal;
+    }
+
+    private Meal createMiddlePriceMeal() {
+        Meal expensiveMeal = new Meal();
+        expensiveMeal.setName("Middle-price meal");
+        expensiveMeal.setPrice(20);
+
+        return expensiveMeal;
+    }
+
+    private Meal createMealWithEnergyValue(String name, int calories) {
+        Meal caloriesMeal = new Meal();
+        caloriesMeal.setName(name);
+        caloriesMeal.setCalories(calories);
+
+        return caloriesMeal;
     }
 
 
