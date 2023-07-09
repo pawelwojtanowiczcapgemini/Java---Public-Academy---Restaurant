@@ -86,11 +86,22 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Meal> findFoodContaining(List<Meal> meals, Produce product) {
-        return null;
+        List<Meal> foodContaining = meals
+                .stream()
+                .filter(mealItem -> mealItem.getProducts().contains(product))
+                .collect(Collectors.toList());
+
+        return foodContaining;
     }
 
     @Override
     public List<Meal> findFoodExcludingAll(List<Meal> meals, List<Produce> products) {
-        return null;
+        List<Meal> foodExcludingAll = meals
+                .stream()
+                .filter(mealItem -> !mealItem.getProducts().containsAll(products))
+                .collect(Collectors.toList());
+
+//                .filter(mealItem -> mealItem.getProducts().contains(products))
+        return foodExcludingAll;
     }
 }

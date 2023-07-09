@@ -3,6 +3,7 @@ package service.impl;
 import domain.DietType;
 import domain.ProductType;
 import domain.eto.Meal;
+import domain.eto.Produce;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.api.MenuService;
@@ -172,10 +173,86 @@ class MenuServiceTest {
 
     @Test
     void findFoodContaining() {
+        // given
+        Produce tomato = createProduct("tomato", ProductType.VEGETABLE);
+        Produce cucumber = createProduct("cucumber", ProductType.VEGETABLE);
+
+        Produce beef = createProduct("beef", ProductType.MEAT);
+        Produce chicken = createProduct("chicken", ProductType.MEAT);
+
+        List<Produce> vegeProducts = new ArrayList<>();
+        vegeProducts.add(tomato);
+        vegeProducts.add(cucumber);
+
+        List<Produce> meatProducts = new ArrayList<>();
+        meatProducts.add(beef);
+        meatProducts.add(chicken);
+
+        Meal vegeMeal = createFullMeal("Salad", DietType.VEGETARIAN, vegeProducts, 100, 20);
+        Meal meatMeal = createFullMeal("Hamburger", DietType.REGULAR, meatProducts, 400, 30);
+
+        // when
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(vegeMeal);
+        mealsToCheck.add(meatMeal);
+
+        // then
+        Produce productToVerify = createProduct("tomato", ProductType.VEGETABLE);
+        MenuServiceImpl menuService = new MenuServiceImpl();
+        List<Meal> resultMeal = menuService.findFoodContaining(mealsToCheck, productToVerify);
+
+        Assertions.assertEquals(1, resultMeal.size());
+        Assertions.assertEquals("Salad", resultMeal.get(0).getName());
+
+
     }
 
     @Test
     void findFoodExcludingAll() {
+        // given
+        Produce tomato = createProduct("tomato", ProductType.VEGETABLE);
+        Produce cucumber = createProduct("cucumber", ProductType.VEGETABLE);
+
+        Produce pineapple = createProduct("pineapple", ProductType.FRUIT);
+
+        Produce beef = createProduct("beef", ProductType.MEAT);
+        Produce chicken = createProduct("chicken", ProductType.MEAT);
+
+        List<Produce> toSalad = new ArrayList<>();
+        toSalad.add(tomato);
+        toSalad.add(pineapple);
+        toSalad.add(cucumber);
+
+        List<Produce> toPizza = new ArrayList<>();
+        toPizza.add(chicken);
+        toPizza.add(pineapple);
+        toPizza.add(cucumber);
+
+        List<Produce> toMeatFood = new ArrayList<>();
+        toMeatFood.add(chicken);
+        toMeatFood.add(beef);
+        toMeatFood.add(tomato);
+
+        Meal salad = createFullMeal("Salad", DietType.VEGETARIAN, toSalad, 100, 10);
+        Meal pizza = createFullMeal("Pizza", DietType.REGULAR, toPizza, 200, 15);
+        Meal meatFood = createFullMeal("Meat Food", DietType.REGULAR, toMeatFood, 400, 25);
+
+        // then
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(salad);
+        mealsToCheck.add(pizza);
+        mealsToCheck.add(meatFood);
+
+        List<Produce> productToCheck = new ArrayList<>();
+        productToCheck.add(pineapple);
+        productToCheck.add(cucumber);
+
+        MenuServiceImpl menuService = new MenuServiceImpl();
+        List<Meal> resultMeals = menuService.findFoodExcludingAll(mealsToCheck, productToCheck);
+
+        Assertions.assertEquals(1, resultMeals.size());
+        Assertions.assertEquals("Meat Food", resultMeals.get(0).getName());
+        Assertions.assertEquals(400, resultMeals.get(0).getCalories());
     }
 
     private Meal createVegetrianMeal() {
@@ -183,10 +260,13 @@ class MenuServiceTest {
         Meal vegetarianMeal = new Meal();
         vegetarianMeal.setName("Cool vege meal");
         vegetarianMeal.setDietType(DietType.VEGETARIAN);
+        vegetarianMeal.setCalories(150);
+        vegetarianMeal.setPrice(20);
 
         return vegetarianMeal;
     }
 
+//
     private Meal createRegularMeal() {
         Meal regularMeal = new Meal();
         regularMeal.setName("Not coll because it's meat meal");
@@ -235,5 +315,41 @@ class MenuServiceTest {
         return caloriesMeal;
     }
 
+//    private Meal createSalad() {
+//
+//        Meal meal = new Meal();
+//        meal.setName("Salad");
+//        meal.setCalories(250);
+//        meal.setDietType(DietType.VEGETARIAN);
+//        meal.setPrice(25);
+//
+//        List<Produce> products = new ArrayList<>();
+//        products.add(createVegetable("Lettuce"));
+//        products.add(createVegetable("Tomato"));
+//        products.add(createVegetable("Cucumber"));
+//        meal.setProducts(products);
+//        return meal;
+//    }
 
-}
+    private Produce createProduct(String name, ProductType productType){
+        Produce product = new Produce();
+        product.setName(name);
+        product.setProductType(productType);
+
+        return product;
+    }
+
+    private Meal createFullMeal(String name, DietType dietType, List<Produce> products, int calories, int price) {
+
+        Meal meal = new Meal();
+        meal.setName(name);
+        meal.setDietType(dietType);
+        meal.setProducts(products);
+        meal.setCalories(calories);
+        meal.setPrice(price);
+
+        return meal;
+
+    }
+
+    }
