@@ -20,7 +20,7 @@ public class MenuServiceImpl implements MenuService {
 
         List<Meal> vegetarianFood = meals
                 .stream()
-                .filter(mealItem -> mealItem.getDietType() == DietType.VEGETARIAN)
+                .filter(mealItem -> mealItem.getDietType() == DietType.VEGETARIAN || mealItem.getDietType() == DietType.VEGAN)
                 .collect(Collectors.toList());
 
         if (vegetarianFood.isEmpty()) {

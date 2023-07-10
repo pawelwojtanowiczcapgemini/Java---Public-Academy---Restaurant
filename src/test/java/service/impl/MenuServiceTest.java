@@ -36,8 +36,26 @@ class MenuServiceTest {
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals("Cool vege meal", results.get(0).getName());
         Assertions.assertEquals(DietType.VEGETARIAN, results.get(0).getDietType());
-
     }
+
+    @Test
+    public void shouldFindVeganWhenVegetarianNeeded(){
+        Meal regularMeal = createRegularMeal();
+        Meal veganMeal = createVeganMeal();
+
+        List<Meal> mealsToCheck = new ArrayList<>();
+        mealsToCheck.add(regularMeal);
+        mealsToCheck.add(veganMeal);
+
+        MenuServiceImpl menuService = new MenuServiceImpl();
+
+        List<Meal> results = menuService.findVegetarianFood(mealsToCheck);
+
+        Assertions.assertEquals(1, results.size());
+        Assertions.assertEquals("Cool vegan meal", results.get(0).getName());
+        Assertions.assertEquals(DietType.VEGAN, results.get(0).getDietType());
+    }
+
 
     @Test
     public void shouldThrowExceptionWhenInputDoesNotContainVegetarian() {
@@ -54,7 +72,6 @@ class MenuServiceTest {
         // then
         Assertions.assertThrows(NoFoodFoundException.class, () ->
                 menuService.findVegetarianFood(mealsToCheck));
-
     }
 
     @Test
@@ -71,7 +88,7 @@ class MenuServiceTest {
     }
 
     @Test
-    void findFoodByType() {
+    void shouldFindFoodByType() {
         // given
         Meal vegetarianMeal = createVegetrianMeal();
         Meal regularMeals = createRegularMeal();
@@ -94,12 +111,10 @@ class MenuServiceTest {
 
         Assertions.assertEquals(1, resultsVegetarian.size());
         Assertions.assertTrue(resultsVegetarian.get(0).getName().contains("vege"));
-
-
     }
 
     @Test
-    void findFoodCheaperThanPrice() {
+    void shouldFindFoodCheaperThanPrice() {
         // given
         Meal cheapMeal = createCheapMeal();
         Meal expensiveMeal = createExpensiveMeal();
@@ -120,7 +135,7 @@ class MenuServiceTest {
     }
 
     @Test
-    void findFoodCheaperWithCalories() {
+    void shouldFindFoodCheaperWithCalories() {
         // given
         Meal highCaloriesMeal = createMealWithEnergyValue("Hamburger", 300);
         Meal lowCaloriesMeal = createMealWithEnergyValue("Salad", 71);
@@ -143,7 +158,7 @@ class MenuServiceTest {
     }
 
     @Test
-    void testFindFoodCheaperThanPrice() {
+    void shouldFindFoodCheaperThanPrice2() {
         // given
         Meal cheapMeal = createCheapMeal();
         Meal expensiveMeal = createExpensiveMeal();
@@ -169,10 +184,8 @@ class MenuServiceTest {
                 menuService.findFoodCheaperThanPrice(mealsToCheck, nameOfFoodWithPriceLimit));
     }
 
-
-
     @Test
-    void findFoodContaining() {
+    void shouldFindFoodContaining() {
         // given
         Produce tomato = createProduct("tomato", ProductType.VEGETABLE);
         Produce cucumber = createProduct("cucumber", ProductType.VEGETABLE);
@@ -203,12 +216,10 @@ class MenuServiceTest {
 
         Assertions.assertEquals(1, resultMeal.size());
         Assertions.assertEquals("Salad", resultMeal.get(0).getName());
-
-
     }
 
     @Test
-    void findFoodExcludingAll() {
+    void shouldFindFoodExcludingAll() {
         // given
         Produce tomato = createProduct("tomato", ProductType.VEGETABLE);
         Produce cucumber = createProduct("cucumber", ProductType.VEGETABLE);
@@ -266,7 +277,14 @@ class MenuServiceTest {
         return vegetarianMeal;
     }
 
-//
+    private Meal createVeganMeal() {
+        Meal veganMeal = new Meal();
+        veganMeal.setName("Cool vegan meal");
+        veganMeal.setDietType(DietType.VEGAN);
+
+        return veganMeal;
+    }
+
     private Meal createRegularMeal() {
         Meal regularMeal = new Meal();
         regularMeal.setName("Not coll because it's meat meal");
@@ -314,22 +332,6 @@ class MenuServiceTest {
 
         return caloriesMeal;
     }
-
-//    private Meal createSalad() {
-//
-//        Meal meal = new Meal();
-//        meal.setName("Salad");
-//        meal.setCalories(250);
-//        meal.setDietType(DietType.VEGETARIAN);
-//        meal.setPrice(25);
-//
-//        List<Produce> products = new ArrayList<>();
-//        products.add(createVegetable("Lettuce"));
-//        products.add(createVegetable("Tomato"));
-//        products.add(createVegetable("Cucumber"));
-//        meal.setProducts(products);
-//        return meal;
-//    }
 
     private Produce createProduct(String name, ProductType productType){
         Produce product = new Produce();
