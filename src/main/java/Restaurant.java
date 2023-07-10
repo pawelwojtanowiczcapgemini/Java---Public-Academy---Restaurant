@@ -1,7 +1,11 @@
+import domain.eto.Storage;
+
 public class Restaurant {
 
   public static void main(String[] args) {
 
-    System.out.print("We Do Not Actually Need This!");
+    Storage storage = new Storage();
+
+    System.out.print(storage.createProductMap());
   }
 }
