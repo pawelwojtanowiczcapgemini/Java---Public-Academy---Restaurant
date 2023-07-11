@@ -6,6 +6,8 @@ public class Restaurant {
 
     Storage storage = new Storage();
 
-    System.out.print(storage.createProductMap());
+    System.out.print(storage.createProductStorage());
+
+
   }
 }
