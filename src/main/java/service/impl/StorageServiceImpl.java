@@ -23,7 +23,9 @@ public class StorageServiceImpl implements StorageService {
                 .filter(entry -> productList.contains(entry.getKey()))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        List<Integer> valuesList = filteredMap.values().stream().collect(Collectors.toList());
+        List<Integer> valuesList = filteredMap.values()
+                .stream()
+                .collect(Collectors.toList());
 
         boolean isTrue = false;
 
