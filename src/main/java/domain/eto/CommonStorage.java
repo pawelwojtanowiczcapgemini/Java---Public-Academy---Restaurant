@@ -1,42 +1,40 @@
 package domain.eto;
 
-import domain.ProductType;
-
 import java.util.*;
 
 public class CommonStorage {
 
-    static Map<Produce, Integer> productsStorage;
+    static Map<Produce, Integer> productStorage;
 
     public CommonStorage() {
     }
 
-    public static Map<Produce, Integer> getProductsStorage() {
-        return productsStorage;
+    public static Map<Produce, Integer> getProductStorage() {
+        return productStorage;
     }
 
-    public static void setProductsStorage(Map<Produce, Integer> productsStorage) {
-        CommonStorage.productsStorage = productsStorage;
+    public static void setProductStorage(Map<Produce, Integer> productStorage) {
+        CommonStorage.productStorage = productStorage;
     }
 
     public static void createEmptyProductStorage() {
-        productsStorage = new HashMap<>();
+        productStorage = new HashMap<>();
     }
 
     public static void addToStorage(Produce product, Integer quantity) {
-        productsStorage.put(product, quantity);
+        productStorage.put(product, quantity);
     }
 
     public static void removeFromStorage(Produce product, Integer quantity) {
-        productsStorage.remove(product, quantity);
+        productStorage.remove(product, quantity);
     }
 
     public static void clearStorage() {
-        productsStorage.clear();
+        productStorage.clear();
     }
 
     public boolean checkInStorage(Produce product) {
-        boolean isIn = productsStorage.containsKey(product);
+        boolean isIn = productStorage.containsKey(product);
         return isIn;
     }
 

@@ -16,7 +16,7 @@ public class StorageServiceImpl implements StorageService {
 
         List<Produce> productList = meal.getProducts()
                 .stream()
-                .collect(Collectors.toList());
+                .toList();
 
         Map<Produce, Integer> filteredMap = productStorage.entrySet()
                 .stream()
@@ -25,19 +25,15 @@ public class StorageServiceImpl implements StorageService {
 
         List<Integer> valuesList = filteredMap.values()
                 .stream()
-                .collect(Collectors.toList());
+                .toList();
 
         boolean isTrue = false;
 
-        for (int i = 0; i < valuesList.size(); i++) {
-            if (valuesList.get(i) > 0) {
-                isTrue = true;
-            } else {
-                isTrue = false;
-            }
+        for (Integer integer : valuesList) {
+            isTrue = integer > 0;
         }
 
-        if(isTrue == false) {
+        if (!isTrue) {
             NoProductFoundInStorageException noProductFoundInStorageException = new NoProductFoundInStorageException();
             throw noProductFoundInStorageException;
         }
