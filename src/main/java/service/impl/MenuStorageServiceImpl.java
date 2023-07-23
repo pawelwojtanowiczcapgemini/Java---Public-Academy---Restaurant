@@ -10,7 +10,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MenuStorageServiceImpl extends MenuServiceImpl {
-    private void canMealBePreparedFromProductsInCommonStorage(Meal meal, Map<Produce, Integer> productStorage) {
+
+
+    void canMealBePreparedFromProductsInCommonStorage(Meal meal, Map<Produce, Integer> productStorage) {
 
 
         List<Produce> productList = meal.getProducts()
@@ -26,13 +28,12 @@ public class MenuStorageServiceImpl extends MenuServiceImpl {
                 .stream()
                 .toList();
 
-        boolean isTrue = false;
+        boolean isTrue = true;
 
-        for (int i = 0; i < valuesList.size(); i++) {
-            if (valuesList.get(i) > 0) {
-                isTrue = true;
-            } else {
+        for (Integer quantity : valuesList) {
+            if (quantity == 0) {
                 isTrue = false;
+                break;
             }
         }
 

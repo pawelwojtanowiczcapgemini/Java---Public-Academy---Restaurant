@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class StorageServiceImpl implements StorageService {
 
+
     @Override
     public void canMealBePreparedFromProductsInStorage(Meal meal, Map<Produce, Integer> productStorage) {
 
@@ -27,11 +28,15 @@ public class StorageServiceImpl implements StorageService {
                 .stream()
                 .toList();
 
-        boolean isTrue = false;
+        boolean isTrue = true;
 
-        for (Integer integer : valuesList) {
-            isTrue = integer > 0;
+        for (Integer quantity : valuesList) {
+            if (quantity == 0) {
+                isTrue = false;
+                break;
+            }
         }
+
 
         if (!isTrue) {
             NoProductFoundInStorageException noProductFoundInStorageException = new NoProductFoundInStorageException();

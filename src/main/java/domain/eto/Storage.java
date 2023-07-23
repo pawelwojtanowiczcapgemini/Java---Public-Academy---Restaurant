@@ -14,18 +14,19 @@ public class Storage {
 
         return product;
     }
+
     public Map<Produce, Integer> createProductStorage() {
         Map<Produce, Integer> productStorage = Map.ofEntries(
                 new AbstractMap.SimpleEntry<>(createProduct("milk", ProductType.DAIRY), 1),
                 new AbstractMap.SimpleEntry<>(createProduct("chicken", ProductType.MEAT), 1),
                 new AbstractMap.SimpleEntry<>(createProduct("flour", ProductType.GRAIN), 1),
-                new AbstractMap.SimpleEntry<>(createProduct("pineapple", ProductType.FRUIT), 0),
+                new AbstractMap.SimpleEntry<>(createProduct("pineapple", ProductType.FRUIT), 1),
                 new AbstractMap.SimpleEntry<>(createProduct("tomato", ProductType.VEGETABLE), 1),
                 new AbstractMap.SimpleEntry<>(createProduct("jam", ProductType.PLANT_BASED), 1),
                 new AbstractMap.SimpleEntry<>(createProduct("salmon", ProductType.FISH), 1),
                 new AbstractMap.SimpleEntry<>(createProduct("egg", ProductType.EGGS), 1),
-                new AbstractMap.SimpleEntry<>(createProduct("pepper", ProductType.SEASONING), 1)
-                );
+                new AbstractMap.SimpleEntry<>(createProduct("pepper", ProductType.SEASONING), 0)
+        );
 
         return productStorage;
     }

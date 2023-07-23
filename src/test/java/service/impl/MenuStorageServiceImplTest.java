@@ -7,6 +7,7 @@ import domain.eto.Meal;
 import domain.eto.Produce;
 import domain.eto.Storage;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.exception.NoProductFoundInStorageException;
 
@@ -28,7 +29,7 @@ class MenuStorageServiceImplTest {
 
         // when: I call the method findVegetarianFood
 
-        List<Meal> mealsToCheck = new ArrayList<Meal>();
+        List<Meal> mealsToCheck = new ArrayList<>();
         mealsToCheck.add(vegetarianMeal);
         mealsToCheck.add(regularMeal);
 
@@ -62,51 +63,70 @@ class MenuStorageServiceImplTest {
         return regularMeal;
     }
 
-// this is the test mentioned in task 4
+    // this is the main test mentioned in task 4
+    @BeforeEach
+    public void completeCommonStorage() {
 
-//    @Test
-//    public void shouldCanMealBePreparedFromProductsInStorage() {
-//        Meal salad = createSalad();
-//
-//        CommonStorage commonStorage = new CommonStorage();
-//
-//
-//        Map<Produce, Integer> productStorage = storage.createProductStorage();
-//
-//        StorageServiceImpl storageService = new StorageServiceImpl();
-//
-//        Assertions.assertThrows(NoProductFoundInStorageException.class, () ->
-//                storageService.canMealBePreparedFromProductsInStorage(salad, productStorage));
-//    }
-//
-//    public Produce createProduct(String name, ProductType productType) {
-//        Produce product = new Produce();
-//        product.setName(name);
-//        product.setProductType(productType);
-//
-//        return product;
-//    }
-//
-//    public List<Produce> createSaladProductList() {
-//
-//        List<Produce> saladproductList = new ArrayList<>();
-//        saladproductList.add(createProduct("tomato", ProductType.VEGETABLE));
-//        saladproductList.add(createProduct("pepper", ProductType.SEASONING));
-//        saladproductList.add(createProduct("pineapple", ProductType.FRUIT));
-//
-//        return saladproductList;
-//    }
-//
-//    public Meal createSalad() {
-//        Meal salad = new Meal();
-//        salad.setName("Salad");
-//        salad.setDietType(DietType.VEGETARIAN);
-//        salad.setPrice(10);
-//        salad.setCalories(150);
-//        salad.setProducts(createSaladProductList());
-//
-//        return salad;
-//    }
+        CommonStorage commonStorage = new CommonStorage();
+
+        Produce tomato = new Produce();
+        tomato.setName("tomato");
+        tomato.setProductType(ProductType.VEGETABLE);
+        Produce pepper = new Produce();
+        pepper.setName("pepper");
+        pepper.setProductType(ProductType.SEASONING);
+        Produce pineapple = new Produce();
+        pineapple.setName("pineapple");
+        pineapple.setProductType(ProductType.FRUIT);
+
+        CommonStorage.createEmptyProductStorage();
+        CommonStorage.addToStorage(tomato, 1);
+        CommonStorage.addToStorage(pepper, 1);
+        CommonStorage.addToStorage(pineapple, 0);
+
+        //return commonStorage.getProductStorage();
+    }
+
+    @Test
+    public void shouldCanMealBePreparedFromProductsInStorage() {
+        Meal salad = createSalad();
+
+
+        MenuStorageServiceImpl menuStorageService = new MenuStorageServiceImpl();
+
+        CommonStorage commonStorage = new CommonStorage();
+        Assertions.assertThrows(NoProductFoundInStorageException.class, () ->
+                menuStorageService.canMealBePreparedFromProductsInCommonStorage(salad, CommonStorage.getProductStorage()));
+    }
+
+    public Produce createProduct(String name, ProductType productType) {
+        Produce product = new Produce();
+        product.setName(name);
+        product.setProductType(productType);
+
+        return product;
+    }
+
+    public List<Produce> createSaladProductList() {
+
+        List<Produce> saladproductList = new ArrayList<>();
+        saladproductList.add(createProduct("tomato", ProductType.VEGETABLE));
+        saladproductList.add(createProduct("pepper", ProductType.SEASONING));
+        saladproductList.add(createProduct("pineapple", ProductType.FRUIT));
+
+        return saladproductList;
+    }
+
+    public Meal createSalad() {
+        Meal salad = new Meal();
+        salad.setName("Salad");
+        salad.setDietType(DietType.VEGETARIAN);
+        salad.setPrice(10);
+        salad.setCalories(150);
+        salad.setProducts(createSaladProductList());
+
+        return salad;
+    }
 
 
 }
